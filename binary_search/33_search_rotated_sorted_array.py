@@ -9,6 +9,12 @@ class Solution:
                 - 2. start > middle < end: shift line is below midpoint
                 - 3. start < middle > end: shift line is above midpoint
             - search subarray where target is in range, until value is found
+
+        Updated:
+            - search left sorted position or search right sorted position
+            - iterative approach, maintain left and right ptr, update middle ptr
+            every loop
+            - 
         """
         if nums == []: return -1
         return self.searchSubarray(nums, 0, len(nums)-1, target)
