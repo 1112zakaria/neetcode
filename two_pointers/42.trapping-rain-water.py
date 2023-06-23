@@ -14,24 +14,30 @@ class Solution:
         - the minimum of these two bars has to be greater than the height
         of b, and the difference is the amount of water at b
         - Q: how do I get the maximums? iterate once and cache left and right max?
+
+        Optimization:
+        - utilize two-pointers, one starting on each edge
+        - keep track of max left height and max right height
+        - process the pointer with the smallest max height
+            - calculate water height and add
         """
         trapped_water = 0
-        left_max_heights = [0 for i in range(len(height))]
-        right_max_heights = [0 for i in range(len(height))]
-        l_ptr, r_ptr = 1, len(height)-2
-        while l_ptr < len(height):
-            # Calculate left and right max height for each bar
-            left_max_heights[l_ptr] = max(height[l_ptr-1], left_max_heights[l_ptr-1])
-            right_max_heights[r_ptr] = max(height[r_ptr+1], right_max_heights[r_ptr+1])
-            l_ptr += 1
-            r_ptr -= 1
-        
-        for i in range(len(height)):
-            local_max_height = min(left_max_heights[i], right_max_heights[i])
-            bar_height = height[i]
-            if local_max_height > bar_height:
-                trapped_water += local_max_height - bar_height
-        
+        l_ptr, r_ptr = 0, len(height)-1
+        max_left = height[l_ptr]
+        max_right = height[r_ptr]
+
+        while l_ptr < r_ptr:
+            # Calculate trapped water and update max height
+            if max_left <= max_right:
+                l_ptr += 1
+                bar_height = height[l_ptr]
+                max_left = max(bar_height, max_left)
+                trapped_water += max_left - bar_height
+            else:
+                r_ptr -= 1
+                bar_height = height[r_ptr]
+                max_right = max(bar_height, max_right)
+                trapped_water += max_right - bar_height
         return trapped_water
         
 # @lc code=end
