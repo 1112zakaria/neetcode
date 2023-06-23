@@ -16,16 +16,18 @@ class Solution:
         *  return index of number i and value of the pair[i]
         *  - calculate the pair needed to match the target, k, and write
         *  pair[k] = index i
+        Approach #2 (exploits sorted property):
+        - start with pointer on the left and right
+        - when the sum of the two ptrs is > target, move the right ptr
+        - when the sum of the two ptrs is < target, move the right ptr
+        - when the sum of the two ptrs == target, return [lptr, rptr]
         """
-        pair_map = collections.defaultdict(set)
-        for i in range(len(numbers)):
-            value = numbers[i]
-            complement = target - value
-            
-            if pair_map[value] != set():
-                return sorted([i+1, pair_map[value]+1])
-            pair_map[complement] = i
-
-        return None
+        l_ptr, r_ptr = 0, len(numbers)-1
+        while numbers[l_ptr] + numbers[r_ptr] != target:
+            left, right = numbers[l_ptr], numbers[r_ptr]
+            local_sum = left + right
+            if local_sum > target: r_ptr -= 1
+            elif local_sum < target: l_ptr += 1
+        return [l_ptr+1, r_ptr+1]
 # @lc code=end
 
