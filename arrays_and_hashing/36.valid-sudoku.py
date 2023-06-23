@@ -3,7 +3,7 @@
 #
 # [36] Valid Sudoku
 #
-
+import collections
 # @lc code=start
 class Solution:
     def isValidSudoku(self, board: List[List[str]]) -> bool:
@@ -18,38 +18,27 @@ class Solution:
             column_index = column // 3
             return row_index, column_index
 
-        rows_map = {k:set() for k in range(9)}
-        columns_map = {k:set() for k in range(9)}
-        boxes_map = {}
-        for j in range(9):
-            for i in range(9):
-                boxes_map[i,j] = set()
+        rows_map = collections.defaultdict(set)
+        columns_map = collections.defaultdict(set)
+        boxes_map = collections.defaultdict(set)
 
         for j in range(len(board)):
             for i in range(len(board[j])):
+                
                 row, column = j, i
                 cell_value = board[row][column]
                 if cell_value == ".":
                     continue
 
-                # check rows map
-                if cell_value in rows_map[row]:
-                    return False
-                else:
-                    rows_map[row].add(cell_value)
-
-                # check columns map
-                if cell_value in columns_map[column]:
-                    return False
-                else:
-                    columns_map[column].add(cell_value)
-
-                # check boxes map
                 box_index = get_box_index(row, column)
-                if cell_value in boxes_map[box_index]:
+                if cell_value in rows_map[row] or \
+                    cell_value in columns_map[column] or \
+                    cell_value in boxes_map[box_index]:
                     return False
-                else:
-                    boxes_map[box_index].add(cell_value)
+                
+                rows_map[row].add(cell_value)
+                columns_map[column].add(cell_value)
+                boxes_map[box_index].add(cell_value)
 
         return True
 # @lc code=end
