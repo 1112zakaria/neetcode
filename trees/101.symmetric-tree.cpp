@@ -17,7 +17,7 @@
  * };
  */
 
-#if 0
+#if 1
 struct TreeNode {
     int val;
     TreeNode *left;
@@ -46,15 +46,11 @@ public:
         if (rootA == nullptr && rootB == nullptr) {
             return true;
         }
-        if (rootA == nullptr || rootB == nullptr) {
+        if (rootA == nullptr || rootB == nullptr || rootA->val != rootB->val) {
             return false;
         }
-
-        if (rootA->val == rootB->val) {
-            return areRootsMirrored(rootA->left, rootB->right) && 
-                areRootsMirrored(rootA->right, rootB->left);
-        }
-        return false; 
+        return areRootsMirrored(rootA->left, rootB->right) && 
+            areRootsMirrored(rootA->right, rootB->left);
     }
 };
 // @lc code=end
