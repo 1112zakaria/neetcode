@@ -80,18 +80,18 @@ private:
             leftPath = maxPathSumHelper(root->left, maxPathSum);
             localDiameter += leftPath;
             maxPathSum = std::max(leftPath, maxPathSum);
-            maxChildPath = std::max(leftPath + root->val, root->val);
+            maxChildPath = std::max(leftPath + root->val, maxChildPath);
         if (root->right != nullptr)
             rightPath = maxPathSumHelper(root->right, maxPathSum);
             localDiameter += rightPath;
             maxPathSum = std::max(rightPath, maxPathSum);
-            maxChildPath = std::max(rightPath + root->val, root->val);
+            maxChildPath = std::max(rightPath + root->val, maxChildPath);
         
         localDiameter += root->val;
         maxPathSum = std::max(localDiameter, maxPathSum);
 
-        maxChildPath = std::max(leftPath, rightPath);
-        return maxChildPath + root->val;
+        //maxChildPath = std::max(leftPath, rightPath);
+        return maxChildPath;
         // problem: if maxChildPath is the maximum, then the tree will be disconnected...
         // we need a way to keep maxChildPath if it is the maximum
         // idea: instead of keeping track of just the maxDiameter, keep track of the
@@ -102,6 +102,7 @@ private:
         // q: can there be a localDiameter if one of the children are null? yes
         // problem: maxChildPath should not be included in maxPathSum calculations if one of
         // the nodes, solution: use right and left paths conditionally
+        // problem: algorithm does not detect single child node as max path sum, solution: 
     }
 };
 // @lc code=end
