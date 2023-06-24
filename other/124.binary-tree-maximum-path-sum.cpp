@@ -51,7 +51,7 @@ public:
         int maxPathSum = root->val;
         int maxRootPath;
         
-        if (root->left == nullptr && root->right == nullptr) return root->val;
+        //if (root->left == nullptr && root->right == nullptr) return root->val;
 
         maxRootPath = maxPathSumHelper(root, maxPathSum);
         return std::max(maxRootPath, maxPathSum);
@@ -70,22 +70,38 @@ private:
     int maxPathSumHelper(TreeNode* root, int &maxPathSum) {
         int leftPath, rightPath, localDiameter, maxChildPath;
 
-        if (root == nullptr) return 0;
-
-        leftPath = maxPathSumHelper(root->left, maxPathSum);
-        rightPath = maxPathSumHelper(root->right, maxPathSum);
+        leftPath = 0;
+        rightPath = 0;
+        localDiameter = 0;
+        maxChildPath = root->val;
+        //if (root == nullptr) return 0;
         
-        localDiameter = leftPath + rightPath + root->val;
+        if (root->left != nullptr)
+            leftPath = maxPathSumHelper(root->left, maxPathSum);
+            localDiameter += leftPath;
+            maxPathSum = std::max(leftPath, maxPathSum);
+            maxChildPath = std::max(leftPath + root->val, root->val);
+        if (root->right != nullptr)
+            rightPath = maxPathSumHelper(root->right, maxPathSum);
+            localDiameter += rightPath;
+            maxPathSum = std::max(rightPath, maxPathSum);
+            maxChildPath = std::max(rightPath + root->val, root->val);
+        
+        localDiameter += root->val;
+        maxPathSum = std::max(localDiameter, maxPathSum);
+
         maxChildPath = std::max(leftPath, rightPath);
-
-        maxPathSum = std::max(std::max(localDiameter, maxChildPath), maxPathSum);
-
         return maxChildPath + root->val;
         // problem: if maxChildPath is the maximum, then the tree will be disconnected...
         // we need a way to keep maxChildPath if it is the maximum
         // idea: instead of keeping track of just the maxDiameter, keep track of the
         // max path sum
         // therefore: you want to always be returning the current max child path + root
+        // problem: null children are interfering with the calculations by returning 0
+        // solution: don't iterate over null children? issue, localDiameter depends on children
+        // q: can there be a localDiameter if one of the children are null? yes
+        // problem: maxChildPath should not be included in maxPathSum calculations if one of
+        // the nodes, solution: use right and left paths conditionally
     }
 };
 // @lc code=end
