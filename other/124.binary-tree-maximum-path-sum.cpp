@@ -51,7 +51,7 @@ public:
         int maxPathSum = root->val;
         int maxRootPath;
         
-        //if (root->left == nullptr && root->right == nullptr) return root->val;
+        if (root->left == nullptr && root->right == nullptr) return root->val;
 
         maxRootPath = maxPathSumHelper(root, maxPathSum);
         return std::max(maxRootPath, maxPathSum);
