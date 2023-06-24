@@ -70,27 +70,25 @@ private:
     int maxPathSumHelper(TreeNode* root, int &maxPathSum) {
         int leftPath, rightPath, localDiameter, maxChildPath;
 
-        leftPath = 0;
-        rightPath = 0;
-        localDiameter = 0;
+        localDiameter = root->val;
         maxChildPath = root->val;
-        //if (root == nullptr) return 0;
         
-        if (root->left != nullptr)
+        if (root->left != nullptr) {
             leftPath = maxPathSumHelper(root->left, maxPathSum);
+            
             localDiameter += leftPath;
             maxPathSum = std::max(leftPath, maxPathSum);
             maxChildPath = std::max(leftPath + root->val, maxChildPath);
-        if (root->right != nullptr)
+        }
+        if (root->right != nullptr) {
             rightPath = maxPathSumHelper(root->right, maxPathSum);
+            
             localDiameter += rightPath;
             maxPathSum = std::max(rightPath, maxPathSum);
             maxChildPath = std::max(rightPath + root->val, maxChildPath);
+        }
         
-        localDiameter += root->val;
         maxPathSum = std::max(localDiameter, maxPathSum);
-
-        //maxChildPath = std::max(leftPath, rightPath);
         return maxChildPath;
         // problem: if maxChildPath is the maximum, then the tree will be disconnected...
         // we need a way to keep maxChildPath if it is the maximum
