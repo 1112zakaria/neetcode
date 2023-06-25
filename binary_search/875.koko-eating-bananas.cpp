@@ -66,7 +66,7 @@ private:
         for (int i=0; i<piles.size(); i++) {
             sum_output += ceil((double)piles[i] / test_k);
         }
-        return (int)sum_output <= h;
+        return sum_output <= h;
     }
  };
 
