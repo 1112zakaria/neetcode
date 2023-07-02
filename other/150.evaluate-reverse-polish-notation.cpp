@@ -36,15 +36,22 @@ static int divide(int x, int y) {
 class Solution {
 public:
     /**
-     * Approach #1 (DFS Stack Recursion?, O(n)):
+     * Approach #1 (DFS Recursion?, O(n)):
      * - base case: token[i] is an int
      *      - return token[i]
      * - recursive case: token[i] is an operation
      *      - return operation(process(i-1), process(i-2))
-     * - 
+     * Approach #2 (Stack, O(n)):
+     * - iterate tokens, for each token:
+     *      - if integer, add to stack
+     *      - if operation, pop the top two ints and push the 
+     *      operation result to the stack
+     * - return stack[0]
     */
     int evalRPN(vector<string>& tokens) {
-        return process(tokens, tokens.size()-1);
+        vector<int> stack = vector<int>();
+        process(tokens, stack);
+        return stack[0];
     }
 
 private:
@@ -55,14 +62,23 @@ private:
         {DIVISION, divide}
     };
 
-    int process(vector<string> &tokens, int pos) {
-        string val = tokens[pos];
-        Operation op = getOperation(val);
-        int nextArg1, nextArg2;
-        if (op == IS_INTEGER) {
-            return getNumber(val);
+    void process(vector<string> &tokens, vector<int> &stack) {
+        string val;
+        int s1, s2;
+        Operation op;
+        for (int i=0; i<tokens.size(); i++) {
+            val = tokens[i];
+            op = getOperation(val);
+            if (op == IS_INTEGER) {
+                stack.push_back(getNumber(val));
+                continue;
+            }
+            s1 = stack.back();
+            stack.pop_back();
+            s2 = stack.back();
+            stack.pop_back();
+            stack.push_back(opFuncMap[op](s2, s1));
         }
-        return opFuncMap[op]( process(tokens, pos-2), process(tokens, pos-1) );
     }
 
     int getNumber(string num) {
