@@ -28,10 +28,16 @@ class Solution:
         - foreach element, add to array
         - at the end of the traversal, sort the array
         - access the kth element in the sorted array
+
+        Approach #2 (Recursive inorder traversal, O(n))
+        - Note: use inorder traversal to traverse in non-decreasing order
+        - traverse bst inorder
+        - store each node in list
+        - return k-1th element
         """
         elements = []
-        self.helper(root, elements)
-        elements.sort()
+        self.helper2(root, elements)
+        #elements.sort()
         return elements[k-1]
 
     def helper(self, root: Optional[TreeNode], elements: list):
@@ -40,6 +46,14 @@ class Solution:
         elements.append(root.val)
         self.helper(root.left, elements)
         self.helper(root.right, elements)
+        return
+    
+    def helper2(self, root: TreeNode, elements: list):
+        if root is None:
+            return
+        self.helper2(root.left, elements)
+        elements.append(root.val)
+        self.helper2(root.right, elements)
         return
 
 
