@@ -6,7 +6,6 @@
 
 #include <vector>
 #include <algorithm>
-#include <iostream>
 
 using namespace std;
 
@@ -15,10 +14,6 @@ struct Car {
     int position;
     float time;
 };
-
-static bool compareCars(Car a, Car b) {
-    return a.position > b.position;
-}
 
 class Solution {
 public:
@@ -49,7 +44,7 @@ public:
     */
     int carFleet(int target, vector<int>& position, vector<int>& speed) {
         vector<Car> cars;
-        Car local_car, back_car;
+        Car local_car, back_car, front_car;
         int back_car_idx, front_car_idx;
         int num_fleets = position.size();
 
@@ -59,20 +54,18 @@ public:
         }
 
         sort(cars.begin(), cars.end(), [](Car a, Car b) {return a.position > b.position;});
-        //sort(cars.begin(), cars.end(), compareCars);
 
-
-        back_car_idx = cars.size() - 1;
-        front_car_idx = cars.size() - 2;
+        back_car_idx = 1;
+        front_car_idx = 0;
         
-        while (back_car_idx >= 0 && front_car_idx >= 0) {
-            back_car = cars[back_car_idx];
-            while (front_car_idx >= 0 && back_car.time <= cars[front_car_idx].time) {
-                front_car_idx--;
+        while (back_car_idx < cars.size() && front_car_idx < cars.size()) {
+            front_car = cars[front_car_idx];
+            while (back_car_idx < cars.size() && cars[back_car_idx].time <= front_car.time) {
+                back_car_idx++;
                 num_fleets--;
             }
-            back_car_idx--;
-            front_car_idx = back_car_idx - 1;
+            front_car_idx = back_car_idx;
+            back_car_idx = front_car_idx + 1;
         }
         return num_fleets;
     }
