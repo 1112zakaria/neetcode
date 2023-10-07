@@ -41,9 +41,8 @@ public:
      *      - if curr_height >= top_height,
      *          - set current_start to idx
      *      - elif:
-     *          - update current_start to current idx
+     *          - update current_start to top of stack's start_idx
      *          - pop all elements bigger than curr_height & calculate area
-    *          - ~~add curr_height to stack~~
      *      - add to stack
      * 
     */
@@ -65,8 +64,8 @@ public:
                 // curr height is decreasing
                 top_height = height_stack.back();
                 max_area = max(max_area, top_height.height * (i - top_height.start_idx));
-                cout << top_height.height * (i - top_height.start_idx) << " st_idx: " << top_height.start_idx << " end_idx: " << i << "\n";
                 height_stack.pop_back();
+                curr_start = top_height.start_idx;
             }
             
             curr_height.start_idx = curr_start; // override curr_start if it was updated
@@ -74,7 +73,7 @@ public:
         }
 
         // clear remaining stack values:
-        int i = heights.size() - 1;
+        int i = heights.size();
         while (!height_stack.empty()) {
             top_height = height_stack.back();
             max_area = max(max_area, top_height.height * (i - top_height.start_idx));
