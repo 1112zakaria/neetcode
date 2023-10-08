@@ -26,6 +26,10 @@ public:
      * from repeating work
      * - base case: end of string idx was reached
      * - recursive case: checking substring for wordDict
+     * - Q: when implementing cache, do I need to notify successes, or should
+     * I just notify failures...
+     *      - i want to notify when it is futile to keep searching, but do I want
+     *      to notify whether a word has already been searched and skip straight to it?
     */
     bool wordBreak(string s, vector<string>& wordDict) {
         vector<bool> cache(s.size(), true);
@@ -34,19 +38,33 @@ public:
 
 private:
     bool helper(string &s, vector<string> &wordDict, int idx, vector<bool> &cache) {
-        bool result = false;
+        bool result = false, local_match = false;
 
         // base case:
         if (idx >= s.size()) {
             return true;
         }
 
+        if (cache[idx] == false) {
+            // if previous searches indicated that there was no result,
+            // stop search immediately
+            return false;
+        }
+
         // recursive case: check substrings for wordDict match
         for (string word : wordDict) {
             if (idx + word.size() <= s.size() && s.substr(idx, word.size()) == word) {
+                local_match = true;
                 result = result || helper(s, wordDict, idx + word.size(), cache);
             }
         }
+
+        if (!local_match) {
+            // cache result of failing to find match at idx to cut the search space
+            // for future iterations
+            cache[idx] = false;
+        }
+
         return result;
     }
 };
