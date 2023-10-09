@@ -68,7 +68,9 @@ public:
 
 
         // clear excess memory if it exists
-        //while (chars.size() > write_ptr) {}
+        while (chars.size() > write_ptr) {
+            chars.pop_back();
+        }
 
         return chars.size();
 
