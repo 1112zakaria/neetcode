@@ -35,6 +35,8 @@ public:
             return "";
         }
 
+        s = ' ' + s;
+
         end = s.size() - 1;
         start = end;
 
@@ -61,9 +63,9 @@ public:
             }
         }
 
-        // append remaining text
+        // append remaining text, in this case, remove training space
         
-        return output;
+        return output.substr(0, output.size()-1);
     }
 };
 // @lc code=end
