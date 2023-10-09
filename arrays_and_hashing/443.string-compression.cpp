@@ -42,13 +42,16 @@ public:
         int write_ptr, read_ptr;
         char curr_char = chars[0], new_char;
         int curr_qty;
+        int init_size = chars.size();
 
         write_ptr = 0;
         read_ptr = 0;
         curr_qty = 0;
 
-        for (char c : chars) {
+        //for (char c : chars) {
+        for (int idx=0; idx < init_size; idx++) {
             // FIXME: i might have to change this to index iteration
+            char c = chars[idx];
             if (curr_char == c) {
                 curr_qty++;  
             } else {
@@ -82,8 +85,7 @@ private:
         // if qty is greater or equal to 10, make sure to write the number as 2 chars
         // FIXME: consider case where qty is 1 perhaps?
         // write character
-        chars[write_ptr] = curr_char;
-        write_ptr++;
+        write_ptr = write(chars, write_ptr, curr_char);
         write_ptr = write_qty(chars, write_ptr, qty); // write qty
         return write_ptr;
     }
@@ -91,13 +93,32 @@ private:
     int write_qty(vector<char> &chars, int write_ptr, int qty) {
         // modulo by 10, write the digit
         int val = qty;
+        vector<char> digits;
+
+        if (qty == 1) {
+            return write_ptr;
+        }
 
         while (val > 0) {
             // print modulo, then divide by 10
-            chars[write_ptr] = '0' + (val % 10);
-            write_ptr++;
+            // FIXME: this is cheating... violates the constant memory clause
+            // how can I do this using constant memory
+            digits.push_back('0' + (val % 10));
             val = val / 10;
         }
+
+        for (int i=digits.size() -1; i>= 0; i--) {
+            write_ptr = write(chars, write_ptr, digits[i]);
+        }
+        return write_ptr;
+    }
+
+    int write(vector<char> &chars, int write_ptr, char val) {
+        if (write_ptr >= chars.size()) {
+            chars.push_back('0');
+        }
+        chars[write_ptr] = val;
+        write_ptr++;
         return write_ptr;
     }
 };
