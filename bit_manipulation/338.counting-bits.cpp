@@ -37,7 +37,8 @@ public:
         msb = 0;
         for (int i = 1; i <= n; i++)
         {
-            if ((1 << msb) + 1 < i)
+            std::cout << "initial msb = " << msb << " ";
+            if ( (1 << (msb + 1)) <= i)
             {
                 msb++;
             }
