@@ -24,8 +24,9 @@ public:
      */
     vector<int> countBits(int n)
     {
-        int msb;
+        // int msb;
         int offset;
+        int base;
         // does this get auto-deallocated when out of the function stack?
         vector<int> result;
 
@@ -34,16 +35,14 @@ public:
         // sol[i] = 1 + sol[offset], offset = i - (1 << msb)
         // keep track of msb and next_msb. when i == next_msb, msb = next_msb and next_msb = msb << 2
         result.push_back(0);
-        msb = 0;
+        base = 1;
         for (int i = 1; i <= n; i++)
         {
-            std::cout << "initial msb = " << msb << " ";
-            if ( (1 << (msb + 1)) <= i)
+            if ( (base << 1) <= i)
             {
-                msb++;
+                base = base << 1;
             }
-            std::cout << "i = " << i << " msb = " << msb << std::endl;
-            offset = i - (1 << msb);
+            offset = i - base;
             result.push_back(1 + result[offset]);
         }
         return result;
