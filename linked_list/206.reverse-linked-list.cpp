@@ -60,6 +60,12 @@ public:
         ListNode *curr_node, *prev_node, *next_node;
         ListNode *reversed_head;
 
+        // nullcase
+        if (head == nullptr)
+        {
+            return nullptr;
+        }
+
         // init
         curr_node = head;
         prev_node = nullptr;
@@ -67,22 +73,21 @@ public:
         // reversed_head = curr_node;
 
         // loop
-        while (curr_node != nullptr)
+        while (curr_node != nullptr && curr_node->next != nullptr)
         {
-            cout << "curr_node = " << curr_node->val << endl;
             // Update output list
             reversed_head = curr_node;
             reversed_head->next = prev_node;
 
-            cout << "middle loop" << endl;
-
             // Increment pointers
             prev_node = curr_node;
             curr_node = next_node;
-            if (curr_node)
-                next_node = curr_node->next;
-            cout << "end loop" << endl;
+            next_node = curr_node->next;
         }
+
+        // Update output list for last element
+        reversed_head = curr_node;
+        reversed_head->next = prev_node;
         return reversed_head;
     }
 };
