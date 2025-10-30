@@ -46,7 +46,6 @@ public:
     ListNode *mergeTwoLists(ListNode *list1, ListNode *list2)
     {
         ListNode *merged_head, *merged_curr;
-        ListNode *smallest_node;
 
         // nullcase
         if (list1 == nullptr && list2 == nullptr)
